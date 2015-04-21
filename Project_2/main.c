@@ -2,7 +2,7 @@
  * main.c
  *
  *  	Created on: Apr 20, 2015
- *      Author: GameTime
+ *      Author: Jordan Love
  */
 
 #include<stdio.h>
@@ -38,6 +38,11 @@ int main(int argc, char** argv) {
   return 0;
 }
 
+/**
+ * This methods creates an array with random numbers and returns it
+ * @param int size of matrix
+ * @return int** 2D array of a matrix
+ */
 int** createMatrix(int size) {
 	int** matrix = malloc(size * sizeof(int *));
 
@@ -55,6 +60,11 @@ int** createMatrix(int size) {
 	return matrix;
 }
 
+/**
+ * This method prints out the array
+ * @param int** matrix to print
+ * @param int size of the array
+ */
 void printMatrix(int **matrix, int size) {
 	int i, j;
 	for (i = 0; i < size; i++) {
@@ -66,6 +76,14 @@ void printMatrix(int **matrix, int size) {
 	}
 }
 
+/**
+ * This method multiplies the first matrix with the second matrix
+ * and returns a int** product matrix
+ * @param int** first matrix
+ * @param int** second matrix
+ * @param int size of the matrices
+ * @return int** product matrix
+ */
 int** multiplyMatrix (int **firstMatrix, int **secondMatrix, int size) {
 	int** finalMatrix = malloc(size * sizeof(int *));
 	int i, j, z, sum;
