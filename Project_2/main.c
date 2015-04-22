@@ -10,6 +10,7 @@
 #include<stdlib.h>
 
 int** createMatrix(int size);
+void freeMatrix(int **matrix, int size);
 void printMatrix(int **matrix, int size);
 int** multiplyMatrix (int **firstMatrix, int **secondMatrix, int size);
 
@@ -35,6 +36,10 @@ int main(int argc, char** argv) {
   printf("Product Matrix!\n");
   printMatrix(finalMatrix, matrixSize);
 
+  //Free the allocated memory for both matrices
+  freeMatrix(firstMatrix, matrixSize);
+  freeMatrix(secondMatrix, matrixSize);
+
   return 0;
 }
 
@@ -58,6 +63,19 @@ int** createMatrix(int size) {
 		}
 	}
 	return matrix;
+}
+
+/**
+ * This method frees the allocated memory for the matrix passed in
+ * @param int ** Matrix
+ * @param int size of matrix
+ */
+void freeMatrix(int **matrix, int size) {
+	int i;
+	for (i = 0; i < size; i++) {
+		free(matrix[i]);
+	}
+	free(matrix);
 }
 
 /**
