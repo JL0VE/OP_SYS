@@ -1,0 +1,105 @@
+Job 0 started.
+About to be enqueue'd to CPU: job 1
+CPU enqueue'd: job 1
+About to be enqueue'd to CPU: job 2
+CPU enqueue'd: job 2
+About to be enqueue'd to CPU: job 3
+CPU enqueue'd: job 3
+About to be enqueue'd to CPU: job 4
+CPU enqueue'd: job 4
+About to be enqueue'd to CPU: job 5
+Job 1 started.
+About to be enqueue'd to CPU: job 6
+CPU enqueue'd: job 5
+About to be enqueue'd to CPU: job 7
+CPU enqueue'd: job 7
+CPU enqueue'd: job 6
+About to be enqueue'd to CPU: job 8
+About to be enqueue'd to CPU: job 9
+CPU enqueue'd: job 8
+CPU enqueue'd: job 9
+About to be enqueue'd to CPU: job 10
+Job 2 started.
+About to be enqueue'd to CPU: job 11
+About to be enqueue'd to CPU: job 12
+CPU enqueue'd: job 10
+CPU enqueue'd: job 12
+About to be enqueue'd to CPU: job 13
+About to be enqueue'd to CPU: job 14
+CPU enqueue'd: job 13
+CPU enqueue'd: job 14
+CPU enqueue'd: job 11
+Job 3 started.
+CPU 0 started.
+CPU 1 started.
+About to be dequeue'd from CPU: job 0
+CPU dequeue'd: job 1
+About to be enqueue'd to IO: job 1;
+IO enqueue'd: job 1
+About to be dequeue'd from CPU: job 1
+CPU dequeue'd: job 2
+About to be enqueue'd to IO: job 2;
+IO enqueue'd: job 2
+About to be dequeue'd from CPU: job 2
+CPU dequeue'd: job 3
+About to be enqueue'd to IO: job 3;
+IO enqueue'd: job 3
+About to be dequeue'd from CPU: job 3
+CPU dequeue'd: job 4
+About to be enqueue'd to IO: job 4;
+IO enqueue'd: job 4
+About to be dequeue'd from CPU: job 4
+CPU dequeue'd: job 5
+About to be dequeue'd from CPU: job 0
+CPU dequeue'd: job 7
+CPU 2 started.
+About to be enqueue'd to IO: job 5;
+IO enqueue'd: job 5
+About to be dequeue'd from CPU: job 5
+CPU dequeue'd: job 6
+About to be enqueue'd to IO: job 7;
+IO enqueue'd: job 7
+About to be dequeue'd from CPU: job 7
+CPU dequeue'd: job 8
+About to be enqueue'd to IO: job 6;
+IO enqueue'd: job 6
+About to be dequeue'd from CPU: job 6
+CPU dequeue'd: job 9
+About to be enqueue'd to IO: job 8;
+IO enqueue'd: job 8
+About to be dequeue'd from CPU: job 8
+CPU dequeue'd: job 10
+About to be enqueue'd to IO: job 9;
+IO enqueue'd: job 9
+About to be dequeue'd from CPU: job 9
+CPU dequeue'd: job 12
+About to be enqueue'd to IO: job 12;
+IO enqueue'd: job 12
+About to be dequeue'd from CPU: job 12
+CPU dequeue'd: job 13
+About to be enqueue'd to IO: job 13;
+IO enqueue'd: job 13
+About to be dequeue'd from CPU: job 13
+CPU dequeue'd: job 14
+About to be enqueue'd to IO: job 10;
+IO enqueue'd: job 10
+About to be dequeue'd from CPU: job 10
+CPU dequeue'd: job 11
+CPU 3 started.
+About to be enqueue'd to IO: job 14;
+IO enqueue'd: job 14
+About to be enqueue'd to IO: job 11;
+IO enqueue'd: job 11
+CPU 4 started.
+CPU 5 started.
+CPU 6 started.
+CPU 7 started.
+IO 0 started.
+About to be dequeue'd from IO: job 0
+Dequeue'd from IO: job 1
+IO 1 started.
+About to be enqueue'd to final: job 1
+Final enqueue'd: job 1
+About to be dequeue'd from IO: job 1
+Dequeue'd from final: job 1
+Dequeue'd from IO: job 2
