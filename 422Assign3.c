@@ -11,7 +11,7 @@
 #include <time.h>
 #include <sys/queue.h>
 
-#define NUMBER_OF_JOBS 10
+#define NUMBER_OF_JOBS 15
 #define CLOCK_CYCLE 2
 
 typedef struct job {
@@ -36,7 +36,8 @@ typedef struct queues {
 } SchedulerQueues;
 
 SchedulerQueues theQueues;
-static int jobCounter = 0;
+FILE *outFile;
+static int jobCounter = 1;
 static int jobsFinished = 0;
 pthread_mutex_t lockCPU;
 pthread_mutex_t lockIO;
@@ -62,6 +63,7 @@ int main(int argc, char** argv) {
 	srand(time(NULL));
 	pthread_t cpuOne[8], ioOne[4], jobOne[4];
 	int i, rc;
+	outFile = fopen("threadfunoutput.txt", "w");
 
 
 	initScheduler();
@@ -75,18 +77,21 @@ int main(int argc, char** argv) {
 	for (i = 0; i < 4; i++) {
 		printf("current job thread: %d\n", i);
 		rc = pthread_create(&(jobOne[i]), NULL, job, NULL);
-		printf("\n\nCPU Size: %d\n", theQueues.cpuSize);
-		printf("\n\nIO Size: %d\n", theQueues.ioSize);
-		printf("\n\nFinished Size: %d\n", theQueues.finishedSize);
+		fprintf(outFile, "Job %d started.\n", i );
+//		printf("\n\nCPU Size: %d\n", theQueues.cpuSize);
+//		printf("\n\nIO Size: %d\n", theQueues.ioSize);
+//		printf("\n\nFinished Size: %d\n", theQueues.finishedSize);
 
 	}
 	for (i = 0; i < 8; i++) {
 		printf("current cpu thread: %d\n", i);
+		fprintf(outFile, "CPU %d started.\n", i );
 		rc = pthread_create(&(cpuOne[i]), NULL, cpu, NULL);
 
 	}
 	for (i = 0; i < 4; i++) {
 		printf("current io thread: %d\n", i);
+		fprintf(outFile, "IO %d started.\n", i );
 		rc = pthread_create(&(ioOne[i]), NULL, io, NULL);
 	}
 
@@ -110,6 +115,7 @@ int main(int argc, char** argv) {
 	pthread_mutex_destroy(&lockIO);
 	pthread_mutex_destroy(&lockFinal);
 	pthread_mutex_destroy(&lockCounter);
+	fclose(outFile);
 	return 1;
 }
 
@@ -201,22 +207,22 @@ void* cpu() {
 	int jobTime;
 	while (jobsFinished < NUMBER_OF_JOBS) {
 		if (theQueues.cpuSize == 0) {
-			sleep(2);
+//			sleep(2);
 		} else {
-			printf("about to be dequeue'd from CPU: job %d\n", jobCounter);
+			fprintf(outFile, "About to be dequeue'd from CPU: job %d\n", job.job_id);
 			//	time(&rawTime);
 			//	printf("system time: %s\n", ctime(&rawTime));
 			job = dequeue(0);
-			printf("CPU dequeue'd: job %d\n", jobCounter);
+			fprintf(outFile, "CPU dequeue'd: job %d\n", job.job_id);
 			//	time(&rawTime);
 			//	printf("system time: %s\n", ctime(&rawTime));
 			jobTime = job.cpuDuration;
-			//	sleep(jobTime);
-			printf("about to be enqueue'd to IO: job %d;\n", jobCounter);
+				sleep(jobTime);
+			fprintf(outFile, "About to be enqueue'd to IO: job %d;\n", job.job_id);
 			printf("iosize: %d\n", theQueues.ioSize);
 			enqueue(job, 1);
 			printf("iosize after enqueue: %d\n", theQueues.ioSize);
-			printf("IO enqueue'd: job %d\n", jobCounter);
+			fprintf(outFile, "IO enqueue'd: job %d\n", job.job_id);
 		}
 
 	}
@@ -228,16 +234,16 @@ void* io() {
 	int jobTime;
 	while (jobsFinished < NUMBER_OF_JOBS) {
 		if (theQueues.ioSize == 0) {
-			sleep(2);
+//			sleep(2);
 		} else {
-			printf("about to be dequeue'd from IO: job %d\n", jobCounter);
+			fprintf(outFile, "About to be dequeue'd from IO: job %d\n", job.job_id);
 			job = dequeue(1);
-			printf("dequeue'd from IO: job %d\n", jobCounter);
+			fprintf(outFile, "Dequeue'd from IO: job %d\n", job.job_id);
 			jobTime = job.ioDuration;
-			//	sleep(jobTime);
-			printf("about to be enqueue'd to final: job %d\n", jobCounter);
+				sleep(jobTime);
+			fprintf(outFile, "About to be enqueue'd to final: job %d\n", job.job_id);
 			enqueue(job, 2);
-			printf("final enqueue'd: job %d\n", jobCounter);
+			fprintf(outFile, "Final enqueue'd: job %d\n", job.job_id);
 		}
 
 	}
@@ -248,31 +254,21 @@ void* io() {
 void* job() {
 	Job job;
 	while (jobsFinished < NUMBER_OF_JOBS) {
-//		if (theQueues.finishedSize == 0) {
-//			sleep(2);
-//		} else
 		if (jobCounter < NUMBER_OF_JOBS) {
 			initJob(&job);
-			printf("about to be enqueue'd to CPU: job %d\n"
-					"current thread: %d\n", jobCounter, pthread_self);
+			fprintf(outFile, "About to be enqueue'd to CPU: job %d\n", job.job_id);
 			enqueue(job, 0);
+//			sleep(2);
 //			printf("cpu size after enqueue: %d\n", theQueues.cpuSize);
-			printf("CPU enqueue'd: job %d\n", jobCounter);
-			//		now = time(0);
-			//		tm = localtime(&now);
-			//		printf("system time in seconds: %d\n", tm.tm_sec);
-			//		sleep(2);
-			//		now = time(0);
-			//		tm = localtime(&now);
-			//		printf("system time in seconds: %d\n", tm.tm_sec);
+			fprintf(outFile, "CPU enqueue'd: job %d\n", job.job_id);
+
 
 			printf("\n\nCPU Size: %d\n", theQueues.cpuSize);
 			printf("\n\nIO Size: %d\n", theQueues.ioSize);
 			printf("\n\nFinished Size: %d\n", theQueues.finishedSize);
 		} else if (theQueues.finishedSize > 0) {
-			printf("about to be dequeue'd from final: job %d\n", jobCounter);
 			job = dequeue(2); //DQ from finished queue
-			printf("dequeue'd from final: job %d\n", jobCounter);
+			fprintf(outFile, "Dequeue'd from final: job %d\n", job.job_id);
 			free(&job);
 			jobsFinished++;
 		}
@@ -280,51 +276,3 @@ void* job() {
 	pthread_exit(NULL);
 	return NULL;
 }
-
-//	Job job1;
-//	Job job2;
-//	Job job3;
-//	Job job4;
-//	initJob(&job1);
-//	initJob(&job2);
-//	initJob(&job3);
-//	initJob(&job4);
-
-//	enqueue(&theQueues, &job1, 0);
-//	enqueue(&theQueues, &job2, 0);
-//	enqueue(&theQueues, &job3, 0);
-//	enqueue(&theQueues, &job4, 0);
-
-//	printf("job1 jobid: %d\n", job1.job_id);
-//	printf("job1 current_phase: %d\n", job1.current_phase);
-//	printf("job1 cpuDuration: %d\n", job1.cpuDuration);
-//	printf("job1 ioDuration: %d\n", job1.ioDuration);
-//	printf("job1 cpuCurrentTiming: %d\n", job1.cpuCurrentTiming);
-//	printf("job1 ioCurrentTiming: %d\n", job1.ioCurrentTiming);
-//	printf("job1 is_completed: %d\n\n", job1.is_completed);
-//
-//	printf("job2 jobid: %d\n", job2.job_id);
-//	printf("job2 current_phase: %d\n", job2.current_phase);
-//	printf("job2 cpuDuration: %d\n", job2.cpuDuration);
-//	printf("job2 ioDuration: %d\n", job2.ioDuration);
-//	printf("job2 cpuCurrentTiming: %d\n", job2.cpuCurrentTiming);
-//	printf("job2 ioCurrentTiming: %d\n", job2.ioCurrentTiming);
-//	printf("job2 is_completed: %d\n\n", job2.is_completed);
-//
-//	printf("job3 jobid: %d\n", job3.job_id);
-//	printf("job3 current_phase: %d\n", job3.current_phase);
-//	printf("job3 cpuDuration: %d\n", job3.cpuDuration);
-//	printf("job3 ioDuration: %d\n", job3.ioDuration);
-//	printf("job3 cpuCurrentTiming: %d\n", job3.cpuCurrentTiming);
-//	printf("job3 ioCurrentTiming: %d\n", job3.ioCurrentTiming);
-//	printf("job3 is_completed: %d\n", job3.is_completed);
-
-//	enqueue(&theQueues, job3, 0);
-//	enqueue(&theQueues, job1, 0);
-//	Job pulledJob = dequeue(&theQueues, 0);
-//	printf("CPU Size: %d\n", theQueues.cpuSize);
-//	printf("IO Size: %d\n", theQueues.ioSize);
-//	printf("Final Size: %d\n", theQueues.finishedSize);
-//	printf("pulled job ID: %d\n", pulledJob.job_id);
-
-//	createJobs(NUMBER_OF_JOBS);
